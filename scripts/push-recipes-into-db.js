@@ -55,17 +55,15 @@ recipes.forEach((recipe) => {
   simpleRecipes.push(simpleRecipe);
 });
 
-// Write recipes to a file
-fs.writeFile(
-  "../backend/db.json",
-  JSON.stringify(simpleRecipes, null, 4),
-  (err) => {
-    // Checking for errors
-    if (err) throw err;
+const output = { recipes: simpleRecipes };
 
-    console.log("Done writing"); // Success
-  }
-);
+// Write recipes to a file
+fs.writeFile("../db.json", JSON.stringify(output, null, 4), (err) => {
+  // Checking for errors
+  if (err) throw err;
+
+  console.log("Done writing"); // Success
+});
 
 /**
  * 
