@@ -1,4 +1,6 @@
-const recipes = require("./recipes.json");
+// make sure to set correct input file
+const recipes = require("./recipes-3.json");
+var axios = require("axios").default;
 const fs = require("fs");
 
 const getMacro = (percentCarbs, percentFat, percentProtein) => {
@@ -28,13 +30,12 @@ const getMacro = (percentCarbs, percentFat, percentProtein) => {
   }
 };
 
-const simpleRecipes = [];
-
-recipes.forEach((recipe) => {
+recipes.forEach(async (recipe) => {
   const percentCarbs = recipe.nutrition.caloricBreakdown.percentCarbs;
   const percentFat = recipe.nutrition.caloricBreakdown.percentFat;
   const percentProtein = recipe.nutrition.caloricBreakdown.percentProtein;
 
+  // create simplified recipe object
   let simpleRecipe = {
     id: recipe.id,
     title: recipe.title,
@@ -52,19 +53,14 @@ recipes.forEach((recipe) => {
     macro: getMacro(percentCarbs, percentFat, percentProtein),
   };
 
-  simpleRecipes.push(simpleRecipe);
-});
-
-const output = { recipes: simpleRecipes };
-
-
-
-// Write recipes to a file
-fs.writeFile("../db.json", JSON.stringify(output, null, 4), (err) => {
-  // Checking for errors
-  if (err) throw err;
-
-  console.log("Done writing"); // Success
+  // make sure server is running...
+  // Add recipe to db.json
+  try {
+    await axios.post("http://localhost:3000/recipes", simpleRecipe);
+    console.log(simpleRecipe.id, "Success");
+  } catch (error) {
+    console.log(simpleRecipe.id, error.response.status);
+  }
 });
 
 /**
