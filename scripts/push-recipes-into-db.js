@@ -1,4 +1,4 @@
-const recipes = require("./recipes.json");
+const recipes = require("./recipes-4.json");
 const fs = require("fs");
 
 const getMacro = (percentCarbs, percentFat, percentProtein) => {
@@ -38,13 +38,14 @@ recipes.forEach((recipe) => {
   let simpleRecipe = {
     id: recipe.id,
     title: recipe.title,
-    steps: recipe.instructions,
     url: recipe.sourceUrl,
-    servings: recipe.servings,
-    minutes: recipe.readyInMinutes,
+    image: recipe.image,
     summary: recipe.summary,
+    minutes: recipe.readyInMinutes,
+    servings: recipe.servings,
+    steps: recipe.instructions,
     nutrition: {
-      calories: recipe.nutrition.nutrients.calories,
+      calories: recipe.nutrition.nutrients[0].amount,
       percentFat: percentFat,
       percentCarbs: percentCarbs,
       percentProtein: percentProtein,
@@ -56,8 +57,6 @@ recipes.forEach((recipe) => {
 });
 
 const output = { recipes: simpleRecipes };
-
-
 
 // Write recipes to a file
 fs.writeFile("../db.json", JSON.stringify(output, null, 4), (err) => {
