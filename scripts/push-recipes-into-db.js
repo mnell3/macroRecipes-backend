@@ -1,6 +1,7 @@
 const recipes = require("./recipes-4.json");
 const fs = require("fs");
 
+
 const getMacro = (percentCarbs, percentFat, percentProtein) => {
   if (
     percentCarbs <= 60 &&
@@ -28,6 +29,7 @@ const getMacro = (percentCarbs, percentFat, percentProtein) => {
   }
 };
 
+// Create a simplified recipe with just the needed information
 const simpleRecipes = [];
 
 recipes.forEach((recipe) => {
@@ -60,23 +62,9 @@ const output = { recipes: simpleRecipes };
 
 // Write recipes to a file
 fs.writeFile("../db.json", JSON.stringify(output, null, 4), (err) => {
-  // Checking for errors
+  // Check for errors
   if (err) throw err;
 
   console.log("Done writing"); // Success
 });
 
-/**
- * 
- *  {
-      "id": 1,
-      "title": "Chicken Soup",
-      "author": "Mary",
-      "steps": "Step 1: Mix ingredients. Step 2: Cook them. Step 3: Enjoy!",
-      "nutrition": {
-        "carbs": 50,
-        "fat": 10
-      },
-      "macro": "body-building"
-    }
- */

@@ -1,3 +1,4 @@
+// replace line 2 with the recipe json file that needs to be pushed
 const recipes = require("./recipes-2.json");
 var axios = require("axios").default;
 const fs = require("fs");
@@ -29,6 +30,7 @@ const getMacro = (percentCarbs, percentFat, percentProtein) => {
   }
 };
 
+// Get the percent carbs, fat, and protein
 for (let index = 1; index < 10; index++) {
   const recipes = require(`./recipes-${index}`);
   recipes.forEach(async (recipe) => {
@@ -36,7 +38,7 @@ for (let index = 1; index < 10; index++) {
     const percentFat = recipe.nutrition.caloricBreakdown.percentFat;
     const percentProtein = recipe.nutrition.caloricBreakdown.percentProtein;
 
-    // [{name: "milk", amount: 3,...},{},{}]
+    // Get ingredient name, amount, and unit for each ingredient
     const ingredients = recipe.extendedIngredients.map((ingredient) => {
       return {
         name: ingredient.name,
@@ -45,25 +47,13 @@ for (let index = 1; index < 10; index++) {
       };
     });
 
+    // Get each step in the recipe
     const steps = recipe.analyzedInstructions[0].steps.map((step) => {
       return {
         number: step.number,
         text: step.step,
       };
     });
-
-    // const stepNumber = recipe.extend.map(
-    //   (step) => recipe.instructions.steps.number
-    // );
-    // const stepName = recipe.map((step) => recipe.instructions.steps.step);
-    // // [sugar, milk, cereal]
-    // const ingredientNames = recipe.extendedIngredients.map(
-    //   (ingredient) => ingredient.name
-    // );
-    // const ingredientAmount = recipe.map(
-    //   // [3,4,6,2]
-    //   (ingredient) => recipe.extendedIngredients.amount
-    // );
 
     // create simplified recipe object
     let simpleRecipe = {
@@ -82,6 +72,7 @@ for (let index = 1; index < 10; index++) {
         percentCarbs: percentCarbs,
         percentProtein: percentProtein,
       },
+      // Sets macro to the correct macro based off the carb, fat, and protein percentages
       macro: getMacro(percentCarbs, percentFat, percentProtein),
     };
 
@@ -99,31 +90,5 @@ for (let index = 1; index < 10; index++) {
         error.response.data.split("\n")[0]
       );
     }
-
-    // });
-
-    // try{
-
-    // var options = {
-    //   method: "GET",
-    //   url: "http://localhost:3000/recipes",
-    //  };
-
-    // axios.request(options).then(function (response) {
-    //   const recipes = response;
-    //   // [ {id: 1}, {id: 48324}, {id: 94757}, ...]
-    //   console.log(recipes);
-
-    //   console.error(error);
-
-    //   recipes.forEach((recipe) =>
-    // axios
-    //   .delete("http://localhost:3000/recipes/)
-    //   .then((res) => console.log("DELETED"))
-    //   .catch((err) => console.log(err));
-    //   );
-    // }
-    //   .catch(function (error) {
-    //       console.error(error);
   });
 }
